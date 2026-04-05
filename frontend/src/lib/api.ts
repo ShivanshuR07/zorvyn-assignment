@@ -7,12 +7,14 @@ import type {
   PagedResponse,
   RecentActivityResponse,
   RecordCreatePayload,
+  RecordUpdatePayload,
   RoleDefinition,
   SummaryReport,
   TrendPeriod,
   TrendResponse,
   TrendTypeFilter,
   UserCreatePayload,
+  UserUpdatePayload,
 } from "../types/api";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
@@ -96,11 +98,24 @@ export const api = {
       body: JSON.stringify(payload),
     });
   },
+  updateUser(token: string, userId: string, payload: UserUpdatePayload) {
+    return request<AuthUser>(`/users/${userId}`, {
+      method: "PATCH",
+      headers: authHeaders(token),
+      body: JSON.stringify(payload),
+    });
+  },
   updateUserState(token: string, userId: string, state: string) {
     return request<AuthUser>(`/users/${userId}/state`, {
       method: "PATCH",
       headers: authHeaders(token),
       body: JSON.stringify({ state }),
+    });
+  },
+  deleteUser(token: string, userId: string) {
+    return request<void>(`/users/${userId}`, {
+      method: "DELETE",
+      headers: authHeaders(token),
     });
   },
   roles(token: string) {
@@ -118,6 +133,19 @@ export const api = {
       method: "POST",
       headers: authHeaders(token),
       body: JSON.stringify(payload),
+    });
+  },
+  updateRecord(token: string, recordId: string, payload: RecordUpdatePayload) {
+    return request<FinancialRecord>(`/financial-records/${recordId}`, {
+      method: "PATCH",
+      headers: authHeaders(token),
+      body: JSON.stringify(payload),
+    });
+  },
+  deleteRecord(token: string, recordId: string) {
+    return request<void>(`/financial-records/${recordId}`, {
+      method: "DELETE",
+      headers: authHeaders(token),
     });
   },
 };

@@ -134,7 +134,8 @@ a {
 }
 
 .ghost-button,
-.primary-button {
+.primary-button,
+.danger-button {
   border-radius: 14px;
   padding: 0.85rem 1.1rem;
 }
@@ -150,6 +151,12 @@ a {
   color: #1f110c;
   font-weight: 700;
   border: none;
+}
+
+.danger-button {
+  background: rgba(215, 95, 57, 0.18);
+  color: #ffd1bf;
+  border: 1px solid rgba(215, 95, 57, 0.42);
 }
 
 .main-panel {
@@ -287,10 +294,29 @@ a {
 }
 
 .section-actions,
-.inline-controls {
+.inline-controls,
+.button-row,
+.table-actions {
   display: flex;
   gap: 0.65rem;
   flex-wrap: wrap;
+}
+
+.table-actions {
+  justify-content: flex-start;
+}
+
+.table-note {
+  display: inline-flex;
+  margin-left: 0.55rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--accent-soft);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
 }
 
 .list-table,
@@ -321,6 +347,11 @@ a {
 .records-table .table-head,
 .records-table .table-row {
   grid-template-columns: 1fr 0.8fr 0.9fr 0.9fr 1.5fr;
+}
+
+.records-table-admin .table-head,
+.records-table-admin .table-row {
+  grid-template-columns: 0.9fr 0.8fr 0.9fr 0.9fr 1.3fr 1fr;
 }
 
 .table-head {

@@ -57,6 +57,79 @@ def test_admin_can_create_record(client):
     assert response.json()["category"] == "travel"
 
 
+def test_admin_can_update_and_delete_record(client):
+    token = _login(client, "admin@example.com", "admin1234")
+    create_response = client.post(
+        "/financial-records",
+        headers={"Authorization": f"Bearer {token}"},
+        json={
+            "amount": "250.00",
+            "type": "expense",
+            "category": "travel",
+            "record_date": "2026-04-03",
+            "notes": "Taxi",
+        },
+    )
+    record_id = create_response.json()["id"]
+
+    update_response = client.patch(
+        f"/financial-records/{record_id}",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"amount": "275.00", "notes": "Airport taxi"},
+    )
+    delete_response = client.delete(
+        f"/financial-records/{record_id}",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    fetch_response = client.get(
+        f"/financial-records/{record_id}",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    assert update_response.status_code == 200
+    assert update_response.json()["amount"] == "275.00"
+    assert update_response.json()["notes"] == "Airport taxi"
+    assert delete_response.status_code == 204
+    assert fetch_response.status_code == 404
+
+
+def test_admin_can_update_and_delete_user(client):
+    token = _login(client, "admin@example.com", "admin1234")
+    create_response = client.post(
+        "/users",
+        headers={"Authorization": f"Bearer {token}"},
+        json={
+            "full_name": "Temp User",
+            "email": "temp-user@example.com",
+            "password": "tempuser1234",
+            "role": "viewer",
+            "state": "active",
+        },
+    )
+    user_id = create_response.json()["id"]
+
+    update_response = client.patch(
+        f"/users/{user_id}",
+        headers={"Authorization": f"Bearer {token}"},
+        json={"full_name": "Updated Temp User", "role": "analyst", "state": "suspended"},
+    )
+    delete_response = client.delete(
+        f"/users/{user_id}",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    fetch_response = client.get(
+        f"/users/{user_id}",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+
+    assert update_response.status_code == 200
+    assert update_response.json()["full_name"] == "Updated Temp User"
+    assert update_response.json()["role"] == "analyst"
+    assert update_response.json()["state"] == "suspended"
+    assert delete_response.status_code == 204
+    assert fetch_response.status_code == 404
+
+
 def test_summary_report_returns_expected_totals(client):
     token = _login(client, "analyst@example.com", "analyst1234")
     response = client.get("/reports/summary", headers={"Authorization": f"Bearer {token}"})

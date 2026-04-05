@@ -81,3 +81,8 @@ def update_user_state(db: Session, user: User, payload: UserStateUpdate) -> User
     db.commit()
     db.refresh(user)
     return user
+
+
+def delete_user(db: Session, user: User) -> None:
+    db.delete(user)
+    db.commit()

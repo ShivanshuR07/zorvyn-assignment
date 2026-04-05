@@ -93,10 +93,25 @@ export interface UserCreatePayload {
   state: UserState;
 }
 
+export interface UserUpdatePayload {
+  full_name?: string;
+  password?: string;
+  role?: Role;
+  state?: UserState;
+}
+
 export interface RecordCreatePayload {
   amount: string;
   type: RecordType;
   category: string;
   record_date: string;
   notes: string;
+}
+
+export interface RecordUpdatePayload {
+  amount?: string;
+  type?: RecordType;
+  category?: string;
+  record_date?: string;
+  notes?: string;
 }
